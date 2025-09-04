@@ -1,9 +1,20 @@
-/* Creamos una base bonita para nuestra página */
+/* Importamos una fuente más decorativa desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap');
+
 body {
   margin: 0;
-  font-family: 'Georgia', serif; /* Una fuente más romántica */
-  background-color: #FFF8E1; /* Un fondo crema muy suave */
-  color: #5D4037; /* Un color de texto café oscuro */
+  font-family: 'Georgia', serif;
+  /* Un degradado sutil para el fondo, como un amanecer */
+  background: linear-gradient(to top, #FFF8E1, #FFECB3);
+  color: #5D4037;
+  overflow: hidden; /* Ocultamos el scroll para que los pétalos no lo generen */
+}
+
+/* Contenedor principal para posicionar los pétalos detrás del contenido */
+.app-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
 }
 
 .container {
@@ -15,11 +26,16 @@ body {
   min-height: 100vh;
   padding: 2rem;
   box-sizing: border-box;
+  /* Posicionamos el contenido por encima de los pétalos */
+  position: relative;
+  z-index: 2;
 }
 
 h1 {
-  font-size: 2.5rem;
-  color: #FFA000; /* Un tono amarillo/naranja para los títulos */
+  font-family: 'Playfair Display', serif; /* Aplicamos la nueva fuente */
+  font-size: 3rem;
+  color: #D32F2F; /* Un tono rojo/terracota para contraste y romance */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
 p {
@@ -29,7 +45,7 @@ p {
 }
 
 button {
-  background-color: #FFC107; /* Amarillo girasol */
+  background-color: #FFC107;
   color: #5D4037;
   border: none;
   padding: 15px 30px;
@@ -39,9 +55,96 @@ button {
   cursor: pointer;
   margin-top: 2rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
+}
+
+/* --- ANIMACIONES --- */
+
+/* Keyframes para la animación de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Keyframes para la animación de salida */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* Keyframes para el pulso del botón */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Clases para aplicar las animaciones */
+.fade-in {
+  animation: fadeInUp 1s ease-in-out forwards;
+}
+
+.fade-out {
+  animation: fadeOut 1s ease-in-out forwards;
+}
+
+.animate-item {
+  opacity: 0; /* Empezamos invisibles */
+  animation: fadeInUp 1s ease-in-out forwards;
+}
+
+/* Aplicamos la animación de pulso al botón después de que aparece */
+button.animate-item {
+  animation: fadeInUp 1s ease-in-out forwards, pulse 2s infinite 2s;
+}
+
+/* --- LLUVIA DE PÉTALOS --- */
+.petals-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none; /* Para que no interfiera con el clic */
+}
+
+.petal {
+  position: absolute;
+  top: -20px; /* Empezamos fuera de la pantalla */
+  width: 15px;
+  height: 15px;
+  background-color: #FFD54F; /* Un amarillo pétalo */
+  border-radius: 1px 15px;
+  opacity: 0.8;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
 }
