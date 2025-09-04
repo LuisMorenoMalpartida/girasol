@@ -1,6 +1,7 @@
 {
   "name": "girasol",
   "version": "0.1.0",
+  "homepage": "https://luismorenomalpartida.github.io/girasol/",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
