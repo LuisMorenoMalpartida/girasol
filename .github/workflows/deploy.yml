@@ -24,6 +24,11 @@ jobs:
     # El tipo de máquina virtual en la que se ejecutará
     runs-on: ubuntu-latest
     
+    # Especifica el entorno de despliegue <-- ¡AQUÍ ESTÁ LA CORRECCIÓN!
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }} # Muestra la URL final en la UI de Actions
+      
     # La secuencia de pasos que se ejecutarán en el trabajo
     steps:
       # 1. Descarga el código de tu repositorio a la máquina virtual
@@ -34,8 +39,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Puedes usar una versión LTS reciente de Node
-          cache: 'npm'       # Activa el caché para las dependencias de npm
+          node-version: '20'
+          cache: 'npm'
 
       # 3. Instala todas las dependencias de tu proyecto
       - name: Install dependencies
@@ -53,7 +58,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Especifica que la carpeta a subir es 'build'
           path: './build'
 
       # 7. Despliega el artefacto subido a GitHub Pages
