@@ -1,45 +1,62 @@
-name: Deploy Vite site to GitHub Pages
+# Nombre del Flujo de Trabajo
+name: Deploy React App to GitHub Pages
 
+# Define cuándo se debe ejecutar el flujo de trabajo
 on:
+  # Se activa cada vez que haces un 'push' a la rama 'main'
   push:
-    branches: [ "main" ]  # 👈 se ejecuta cuando hagas push a la rama main
+    branches:
+      - main
+      
+  # Permite ejecutar este flujo de trabajo manualmente desde la pestaña Actions en GitHub
+  workflow_dispatch:
 
+# Define los permisos que necesitará el flujo de trabajo para funcionar
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Define los trabajos (jobs) que se ejecutarán
 jobs:
-  build:
+  # Un único trabajo llamado 'build-and-deploy'
+  build-and-deploy:
+    # El tipo de máquina virtual en la que se ejecutará
     runs-on: ubuntu-latest
+    
+    # La secuencia de pasos que se ejecutarán en el trabajo
     steps:
-      - name: Checkout code
+      # 1. Descarga el código de tu repositorio a la máquina virtual
+      - name: Checkout
         uses: actions/checkout@v4
 
+      # 2. Configura el entorno de Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20  # usa tu versión de Node
-          cache: npm
+          node-version: '20' # Puedes usar una versión LTS reciente de Node
+          cache: 'npm'       # Activa el caché para las dependencias de npm
 
+      # 3. Instala todas las dependencias de tu proyecto
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
+      # 4. Ejecuta el script 'build' para crear la versión de producción de tu app
+      - name: Build
         run: npm run build
 
+      # 5. Configura GitHub Pages para el despliegue
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 6. Sube los archivos de la página (el "artefacto") desde la carpeta 'build'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          # Especifica que la carpeta a subir es 'build'
+          path: './build'
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
+      # 7. Despliega el artefacto subido a GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
