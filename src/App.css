@@ -380,3 +380,24 @@ button:hover {
   }
 }
 
+/* --- Estilos para el Reproductor de Música Incrustado --- */
+.music-player-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 300px; /* Ancho estándar del reproductor de Spotify */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  border-radius: 12px;
+}
+
+/* Ajuste para celulares */
+@media (max-width: 768px) {
+  .music-player-container {
+    width: 90%;
+    max-width: 300px;
+    right: 5%;
+    bottom: 15px;
+  }
+}
+

@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
-// --- Datos para las secciones ---
-// Personaliza estos datos con tus propios recuerdos, fotos y mensajes.
+// --- Tus datos personalizados ---
 const memories = [
   { id: 1, title: "El día que nos vimos por primera vez", date: " 22 de Julio", message: "Ese día supe que contigo cualquier lugar se convierte en el paraíso. Tu sonrisa iluminó todo.", imageUrl: "https://placehold.co/400x500/FFC107/5D4037?text=Nuestra+Foto+1", position: { top: '25%', left: '15%' }, icon: '😳' },
   { id: 2, title: "Aniversario", date: "03 de cada mes", message: "Cada día a tu lado es un regalo. Gracias por tanto amor y alegría.", imageUrl: "https://placehold.co/400x500/F06292/FFFFFF?text=Nuestra+Foto+2", position: { top: '50%', left: '80%' }, icon: '💖' },
@@ -44,9 +43,6 @@ function App() {
   const [activeMemory, setActiveMemory] = useState(null);
   const [bridgeMessage, setBridgeMessage] = useState("Pasa el mouse sobre el camino...");
   const [isBoxOpen, setIsBoxOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const audioRef = useRef(null);
 
   const handleBloomClick = () => {
     setIsFading(true);
@@ -63,15 +59,6 @@ function App() {
     setActiveMemory(null);
   };
 
-  const toggleMusic = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
-
   const petals = Array.from({ length: 20 }).map((_, index) => (
     <div className="petal" key={index} style={{
       left: `${Math.random() * 100}vw`,
@@ -82,11 +69,20 @@ function App() {
 
   return (
     <>
-      {/* Añade tu archivo de música en la carpeta 'public' y cambia el nombre aquí */}
-      <audio ref={audioRef} src="/musica-fondo.mp3" loop />
-      <button className="music-toggle" onClick={toggleMusic}>
-        {isPlaying ? '暂停' : '▶️'}
-      </button>
+      {/* --- REPRODUCTOR DE MÚSICA DE SPOTIFY --- */}
+      <div className="music-player-container">
+        <iframe 
+            title="Spotify Player"
+            style={{borderRadius: "12px"}} 
+            src="https://open.spotify.com/embed/track/0lBU6zyCOkJ3xMgjj78TQd?utm_source=generator" 
+            width="100%" 
+            height="152" 
+            frameBorder="0" 
+            allowFullScreen="" 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            loading="lazy">
+        </iframe>
+      </div>
 
       <div className="app-container">
         <div className="petals-container">{petals}</div>
