@@ -1,20 +1,39 @@
-/* Importamos una fuente más decorativa desde Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400&display=swap');
 
-body {
-  margin: 0;
-  font-family: 'Georgia', serif;
-  /* Un degradado sutil para el fondo, como un amanecer */
-  background: linear-gradient(to top, #FFF8E1, #FFECB3);
-  color: #5D4037;
-  overflow: hidden; /* Ocultamos el scroll para que los pétalos no lo generen */
+:root {
+  --primary-font: 'Poppins', sans-serif;
+  --title-font: 'Playfair Display', serif;
+  --bg-color: #FFF8E1;
+  --text-color: #5D4037;
+  --accent-yellow: #FFC107;
+  --accent-dark-yellow: #FFA000;
+  --accent-red: #D32F2F;
 }
 
-/* Contenedor principal para posicionar los pétalos detrás del contenido */
+/* --- Cursor Personalizado --- */
+body {
+  /* Reemplaza la URL con un emoji de girasol codificado */
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size: 24px;'><text y='24'>🌻</text></svg>"), auto;
+}
+
+/* --- Configuración General y Animaciones de Fondo --- */
+body {
+  margin: 0;
+  font-family: var(--primary-font);
+  background: linear-gradient(to top, var(--bg-color), #FFECB3);
+  color: var(--text-color);
+  overflow-x: hidden;
+}
+
 .app-container {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden; /* Oculta pétalos que se salen */
+}
+
+.main-content {
+  animation: fadeIn 1.5s ease-in-out;
 }
 
 .container {
@@ -24,29 +43,64 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 4rem 2rem;
   box-sizing: border-box;
-  /* Posicionamos el contenido por encima de los pétalos */
   position: relative;
   z-index: 2;
 }
 
+h1, h2 {
+  font-family: var(--title-font);
+}
+
 h1 {
-  font-family: 'Playfair Display', serif; /* Aplicamos la nueva fuente */
-  font-size: 3rem;
-  color: #D32F2F; /* Un tono rojo/terracota para contraste y romance */
+  font-size: clamp(2rem, 6vw, 3rem);
+  color: var(--accent-red);
   text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
+h2 {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  color: var(--accent-dark-yellow);
+}
+
 p {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   line-height: 1.6;
   max-width: 600px;
 }
 
+/* --- Animaciones Base --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* --- Pantalla de Inicio --- */
+.intro-screen .animate-item {
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+.intro-screen.fade-out {
+  animation: fadeOut 1s ease-in-out forwards;
+}
+.intro-screen button {
+  animation: fadeIn 1s ease-in-out forwards 1.5s, pulse 2.5s infinite 2.5s;
+  opacity: 0;
+}
+
 button {
-  background-color: #FFC107;
-  color: #5D4037;
+  background-color: var(--accent-yellow);
+  color: var(--text-color);
   border: none;
   padding: 15px 30px;
   font-size: 1.1rem;
@@ -57,94 +111,209 @@ button {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
-
 button:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
 }
 
-/* --- ANIMACIONES --- */
-
-/* Keyframes para la animación de entrada */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Keyframes para la animación de salida */
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-}
-
-/* Keyframes para el pulso del botón */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-/* Clases para aplicar las animaciones */
-.fade-in {
-  animation: fadeInUp 1s ease-in-out forwards;
-}
-
-.fade-out {
-  animation: fadeOut 1s ease-in-out forwards;
-}
-
-.animate-item {
-  opacity: 0; /* Empezamos invisibles */
-  animation: fadeInUp 1s ease-in-out forwards;
-}
-
-/* Aplicamos la animación de pulso al botón después de que aparece */
-button.animate-item {
-  animation: fadeInUp 1s ease-in-out forwards, pulse 2s infinite 2s;
-}
-
-/* --- LLUVIA DE PÉTALOS --- */
+/* --- Lluvia de Pétalos --- */
 .petals-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none; /* Para que no interfiera con el clic */
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1; pointer-events: none;
 }
-
 .petal {
-  position: absolute;
-  top: -20px; /* Empezamos fuera de la pantalla */
-  width: 15px;
-  height: 15px;
-  background-color: #FFD54F; /* Un amarillo pétalo */
+  position: absolute; top: -20px;
+  width: 15px; height: 15px;
+  background-color: #FFD54F;
   border-radius: 1px 15px;
   opacity: 0.8;
   animation-name: fall;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
-
 @keyframes fall {
-  0% {
-    transform: translateY(0) rotate(0deg);
-  }
-  100% {
-    transform: translateY(100vh) rotate(720deg);
-    opacity: 0;
-  }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* --- Sección 1: Jardín de Recuerdos --- */
+.garden-container {
+  width: 100%;
+  height: 100vh; /* Ocupa toda la pantalla */
+  position: relative;
+}
+.flower {
+  position: absolute;
+  font-size: 3rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  animation: pulse 5s infinite;
+}
+.flower:hover {
+  transform: scale(1.3);
+}
+.scroll-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    animation: pulse 2s infinite;
+}
+.scroll-indicator span {
+    display: block;
+    margin-top: 5px;
+    font-size: 1.5rem;
+}
+
+/* --- Tarjeta de Recuerdo (Modal) --- */
+.memory-card-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fadeIn 0.5s;
+}
+.memory-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  max-width: 90%;
+  width: 500px;
+  text-align: center;
+  position: relative;
+}
+.memory-card img {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+.memory-card .date {
+  font-style: italic;
+  color: #888;
+  margin-bottom: 1rem;
+}
+.close-button {
+  position: absolute;
+  top: 15px; right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* --- Sección 2: Puente de Girasoles --- */
+.bridge-container {
+  background-color: #A5D6A7; /* Un fondo verde prado */
+  width: 100%;
+}
+.bridge-content {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  height: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.location-dot {
+  width: 50px; height: 50px;
+  background-color: var(--accent-red);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.5rem;
+}
+.bridge-path {
+  position: absolute;
+  top: 50%; left: 50px;
+  right: 50px; height: 10px;
+  background-color: #8D6E63; /* Color tierra */
+  transform: translateY(-50%);
+  border-radius: 5px;
+}
+.bridge-message {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255,255,255,0.8);
+  padding: 5px 15px;
+  border-radius: 20px;
+  transition: opacity 0.5s;
+}
+
+/* --- Sección 3: Caja de Ánimo --- */
+.support-box-container {
+  position: relative;
+}
+.support-box {
+  font-size: 8rem;
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.support-box.open {
+  transform: translateY(-20px) rotate(-15deg);
+}
+.seed-container {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+}
+.seed {
+  position: absolute;
+  top: 50%; left: 50%;
+  background-color: var(--accent-yellow);
+  border-radius: 50%;
+  pointer-events: auto;
+  opacity: 0;
+}
+.seed .tooltip {
+  visibility: hidden;
+  width: 180px;
+  background-color: var(--text-color);
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -90px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.seed:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+@keyframes fly-out {
+  0% { transform: translate(0,0) scale(0); opacity: 1; }
+  100% { transform: var(--transform-end) scale(1); opacity: 1; }
+}
+
+/* --- Música --- */
+.music-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--accent-yellow);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
