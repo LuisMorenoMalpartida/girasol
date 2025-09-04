@@ -10,19 +10,15 @@
   --accent-red: #D32F2F;
 }
 
-/* --- Cursor Personalizado --- */
-body {
-  /* Reemplaza la URL con un emoji de girasol codificado */
-  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size: 24px;'><text y='24'>🌻</text></svg>"), auto;
-}
-
-/* --- Configuración General y Animaciones de Fondo --- */
+/* --- Configuración General y Cursor --- */
 body {
   margin: 0;
   font-family: var(--primary-font);
   background: linear-gradient(to top, var(--bg-color), #FFECB3);
   color: var(--text-color);
   overflow-x: hidden;
+  /* Cursor personalizado para escritorio */
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size: 24px;'><text y='24'>🌻</text></svg>"), auto;
 }
 
 .app-container {
@@ -232,6 +228,7 @@ button:hover {
   align-items: center;
   color: white;
   font-size: 1.5rem;
+  flex-shrink: 0; /* Evita que los puntos se encojan */
 }
 .bridge-path {
   position: absolute;
@@ -250,6 +247,7 @@ button:hover {
   padding: 5px 15px;
   border-radius: 20px;
   transition: opacity 0.5s;
+  width: max-content; /* Evita que el texto se rompa */
 }
 
 /* --- Sección 3: Caja de Ánimo --- */
@@ -317,3 +315,68 @@ button:hover {
     z-index: 100;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
+
+/*
+==============================================
+--- Responsive Design (Para Celulares) ---
+==============================================
+*/
+@media (max-width: 768px) {
+  .container {
+    padding: 4rem 1rem; /* Menos padding a los lados */
+  }
+
+  h1 {
+    font-size: clamp(2rem, 10vw, 2.5rem);
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 8vw, 2rem);
+  }
+
+  .flower {
+    font-size: 2.5rem; /* Flores un poco más pequeñas */
+  }
+
+  .memory-card {
+    padding: 1.5rem;
+    width: 90%;
+  }
+
+  .memory-card img {
+    max-height: 200px;
+  }
+  
+  .bridge-content {
+    height: 150px;
+  }
+  
+  .location-dot {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .bridge-path {
+    left: 40px;
+    right: 40px;
+  }
+
+  .bridge-message {
+    padding: 3px 10px;
+    font-size: 0.8rem;
+  }
+
+  .support-box {
+    font-size: 6rem; /* Caja un poco más pequeña */
+  }
+  
+  .music-toggle {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
