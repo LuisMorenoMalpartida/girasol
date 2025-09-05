@@ -18,13 +18,33 @@ const supportMessages = [
   "Estoy muy orgulloso de ti, pase lo que pase."
 ];
 
+// --- Contenido de la Carta ---
+// Puedes editar este texto para personalizar tu carta.
+const LetterContent = () => (
+    <div className="letter-body">
+        <p>Mi niña hermosa,</p>
+        <p>
+            Si estás leyendo esto, es porque has explorado este pequeño rincón del universo que he creado solo para ti. Cada flor, cada palabra, es un reflejo de lo mucho que significas para mí, y aun así, siento que se queda corto para expresar la inmensidad de lo que siento por ti. Te quiero por lo que eres y te amo por cómo me haces ser.
+        </p>
+        <p>
+            Sé que estás en un momento de mucho esfuerzo y dedicación, y quiero que nunca dudes de tu increíble capacidad. Eres brillante, fuerte y puedes lograr todo lo que te propongas.
 
-// --- Componente Tarjeta de Recuerdo (Modal) ---
+Quiero que sepas algo muy importante: no soy perfecto y seguramente cometeré errores, pero mi promesa es estar siempre aquí para ti. Seré tu calma en medio de la tormenta y tu risa en los días de sol. Mi lugar en este mundo es a tu lado, sin importar las circunstancias.
+
+Estaré contigo hasta donde la vida me lo permita, y si hay algo más allá, ten por seguro que desde allí seguiré cuidando de ti. Porque un amor como el nuestro no termina, solo se transforma..
+        </p>
+        <p>Gracias por llenar mi vida de colores. Esto es solo el comienzo de una historia hermosa.</p>
+        <p className="letter-signature">Con todo mi amor,<br/>Luis</p>
+    </div>
+);
+
+
+// --- Componentes Modales ---
 const MemoryCard = ({ memory, onClose }) => {
   if (!memory) return null;
   return (
-    <div className="memory-card-overlay" onClick={onClose}>
-      <div className="memory-card" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>&times;</button>
         <h2>{memory.title}</h2>
         <p className="date">{memory.date}</p>
@@ -35,6 +55,18 @@ const MemoryCard = ({ memory, onClose }) => {
   );
 };
 
+const LetterCard = ({ isOpen, onClose }) => {
+    if (!isOpen) return null;
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+                <button className="close-button" onClick={onClose}>&times;</button>
+                <LetterContent />
+            </div>
+        </div>
+    );
+};
+
 
 // --- Componente Principal ---
 function App() {
@@ -43,6 +75,7 @@ function App() {
   const [activeMemory, setActiveMemory] = useState(null);
   const [bridgeMessage, setBridgeMessage] = useState("Pasa el mouse sobre el camino...");
   const [isBoxOpen, setIsBoxOpen] = useState(false);
+  const [isLetterOpen, setIsLetterOpen] = useState(false);
 
   const handleBloomClick = () => {
     setIsFading(true);
@@ -51,14 +84,6 @@ function App() {
     }, 1000);
   };
   
-  const handleFlowerClick = (memory) => {
-    setActiveMemory(memory);
-  };
-
-  const handleCloseCard = () => {
-    setActiveMemory(null);
-  };
-
   const petals = Array.from({ length: 20 }).map((_, index) => (
     <div className="petal" key={index} style={{
       left: `${Math.random() * 100}vw`,
@@ -69,7 +94,6 @@ function App() {
 
   return (
     <>
-      {/* --- REPRODUCTOR DE MÚSICA DE SPOTIFY --- */}
       <div className="music-player-container">
         <iframe 
             title="Spotify Player"
@@ -102,7 +126,6 @@ function App() {
           </div>
         ) : (
           <main className="main-content">
-            {/* --- Sección 1: Jardín de Recuerdos --- */}
             <section className="container garden-container">
               <h1>¡Nuestro Jardín Secreto!</h1>
               <p>Cada flor es un recuerdo. Haz clic en ellas para revivir la magia.</p>
@@ -111,7 +134,7 @@ function App() {
                   className="flower" 
                   key={memory.id}
                   style={{ top: memory.position.top, left: memory.position.left, animationDelay: `${Math.random()*2}s`}}
-                  onClick={() => handleFlowerClick(memory)}
+                  onClick={() => setActiveMemory(memory)}
                 >
                   {memory.icon}
                 </div>
@@ -122,7 +145,6 @@ function App() {
               </div>
             </section>
 
-            {/* --- Sección 2: Puente de Girasoles --- */}
             <section className="container bridge-container">
                 <h2>Un Puente Para Nosotros</h2>
                 <p>Aunque la distancia nos separe, mi corazón siempre está contigo.</p>
@@ -137,15 +159,19 @@ function App() {
                 </div>
             </section>
             
-            {/* --- Sección 3: Caja de Ánimo --- */}
             <section className="container support-box-container">
-                <h2>Una Caja de Apoyo Incondicional</h2>
-                <p>Para esos momentos en que necesites un empujón. ¡Ábrela!</p>
-                <div 
-                  className={`support-box ${isBoxOpen ? 'open' : ''}`}
-                  onClick={() => setIsBoxOpen(true)}
-                >
-                  {isBoxOpen ? '🗃️' : '📦'}
+                <h2>Apoyo y una Carta para Ti</h2>
+                <p>Para esos momentos en que necesites un empujón... y unas palabras de aliento.</p>
+                <div className="support-items-wrapper">
+                    <div 
+                      className={`support-box ${isBoxOpen ? 'open' : ''}`}
+                      onClick={() => setIsBoxOpen(true)}
+                    >
+                      {isBoxOpen ? '🗃️' : '📦'}
+                    </div>
+                    <div className="letter-icon" onClick={() => setIsLetterOpen(true)}>
+                        💌
+                    </div>
                 </div>
                 {isBoxOpen && (
                     <div className="seed-container">
@@ -170,7 +196,8 @@ function App() {
         )}
       </div>
 
-      <MemoryCard memory={activeMemory} onClose={handleCloseCard} />
+      <MemoryCard memory={activeMemory} onClose={() => setActiveMemory(null)} />
+      <LetterCard isOpen={isLetterOpen} onClose={() => setIsLetterOpen(false)} />
     </>
   );
 }
